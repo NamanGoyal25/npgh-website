@@ -3,8 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-display: "Neue Montreal", "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Was "Neue Montreal", "Inter", system-ui, sans-serif — "Neue Montreal" has
+     no @font-face/next-font source anywhere in this project, so the browser
+     silently substituted a local system font for that unresolved name. That
+     substitution is what corrupted specific glyphs (the lowercase "g" in
+     HeritageGlassSection.tsx's font-display heading). Routing display type
+     through the same next/font-loaded Inter instance as body text removes
+     the ghost font reference entirely. */
+  --font-display: var(--font-sans);
 
   --npgh-charcoal: #091019;
   --npgh-gold: #CBAE89;
