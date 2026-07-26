@@ -130,27 +130,35 @@ const SpecialtyCard = memo(function SpecialtyCard({
             title plus a short two-line preview; on hover (desktop) or tap
             (mobile, via the isOpen state above) it smoothly grows taller
             and un-clamps the paragraph to reveal the full description —
-            no modal, just the card breathing open in place. overflow-hidden
-            + max-height (rather than animating height directly) is what
-            makes that a smooth, GPU-cheap transition instead of a jump-cut.
-            transform-gpu + will-change-transform keep the backdrop-blur on
-            its own compositor layer so it doesn't get recomputed against
-            the rest of the page on every scroll tick. */}
+            no modal, just the card breathing open in place.
+
+            The two compact (single-column) cards have a hard-capped 16rem
+            row height from the grid, so their expanded max-height is kept
+            well inside that budget (icon row + padding + panel all have to
+            add up to less than the card's fixed height, or the card's own
+            overflow-hidden silently clips the panel instead of the panel
+            clipping its own text). min-h-0 is required here too — flex
+            items default to min-height:auto, which otherwise fights the
+            max-height/overflow-y-auto combo and lets the panel balloon past
+            its flex allocation. overflow-y-auto is the safety net on top of
+            that budget: if a particular card's copy is still too long to
+            fit even fully expanded, it scrolls inside the glass panel with
+            a subtle scrollbar instead of being clipped or pushed off-card. */}
         <div
-          className={`transform-gpu overflow-hidden rounded-2xl border border-white/15 bg-obsidian/40 pt-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-xl transition-all duration-300 ease-out will-change-transform ${
+          className={`min-h-0 transform-gpu overflow-y-auto rounded-2xl border border-white/15 bg-obsidian/40 pt-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-xl transition-all duration-300 ease-out will-change-transform ${
             isCompact ? "px-3" : "px-4 sm:px-5"
           } ${
             isOpen
               ? isCompact
-                ? "max-h-40 pb-5"
+                ? "max-h-32 pb-4"
                 : "max-h-60 pb-6"
               : isCompact
-              ? "max-h-16 pb-4 group-hover:max-h-40 group-hover:pb-5"
+              ? "max-h-20 pb-4 group-hover:max-h-32"
               : "max-h-20 pb-4 group-hover:max-h-60 group-hover:pb-6"
           }`}
         >
           <h3
-            className={`font-medium text-white ${
+            className={`line-clamp-2 font-medium text-white ${
               isCompact ? "text-base leading-snug" : "text-lg sm:text-xl"
             }`}
           >
