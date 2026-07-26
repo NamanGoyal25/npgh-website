@@ -145,8 +145,16 @@ export default function HeritageGlassSection() {
               Heritage Craftsmanship
             </span>
 
-            <h2 className="mt-6 font-display text-3xl font-semibold leading-[1.15] tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
-              <span className="block bg-gradient-to-r from-amber-100 via-amber-200 to-amber-300 bg-clip-text text-transparent">
+            <h2 className="mt-6 font-display text-3xl font-semibold leading-snug tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
+              {/* Each line is its own block-level span carrying its own gradient
+                  background (required for the bg-clip-text trick). With the
+                  old leading-[1.15], the two boxes stacked with zero gap, so
+                  the second span's opaque gradient background began right at
+                  the first line's baseline — painting over the descender of
+                  the "g" in "Preserving" before it could render. leading-snug
+                  plus explicit pb-1 on the non-last lines gives the descender
+                  room to clear before the next line's background starts. */}
+              <span className="block pb-1 bg-gradient-to-r from-amber-100 via-amber-200 to-amber-300 bg-clip-text text-transparent">
                 Preserving Heritage.
               </span>
               <span className="block bg-gradient-to-r from-amber-200 via-amber-300 to-amber-100 bg-clip-text text-transparent">
