@@ -5,6 +5,15 @@
 :root {
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Neue Montreal", "Inter", system-ui, sans-serif;
+
+  --npgh-charcoal: #091019;
+  --npgh-gold: #CBAE89;
+  --npgh-blue: #243A54;
+  --npgh-white: #F2EFEA;
+}
+
+.gold-metallic {
+  background: linear-gradient(135deg, #8f704e 0%, #cbae89 45%, #f0d6a7 70%, #a7835d 100%);
 }
 
 html {

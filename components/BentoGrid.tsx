@@ -81,7 +81,7 @@ const SpecialtyCard = memo(function SpecialtyCard({
       role="button"
       tabIndex={0}
       aria-expanded={isOpen}
-      className={`iridescent-border group relative transform-gpu cursor-pointer overflow-hidden rounded-3xl border border-white/8 transition-shadow duration-500 will-change-transform ${layout} ${item.glow}`}
+      className={`iridescent-border group relative transform-gpu cursor-pointer overflow-hidden rounded-3xl border border-npgh-white/8 transition-shadow duration-500 will-change-transform ${layout} ${item.glow}`}
     >
       {/* Residential application photo */}
       <Image
@@ -93,11 +93,11 @@ const SpecialtyCard = memo(function SpecialtyCard({
         priority={index === 0}
       />
 
-      {/* Minimal wash — just enough to seat the card in the obsidian
+      {/* Minimal wash — just enough to seat the card in the npgh-charcoal
           mood without muddying the photography. Legibility for the
           copy now comes from the dedicated glass panel below, not
           from darkening the whole image. */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian/75 via-obsidian/10 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-npgh-charcoal/75 via-npgh-charcoal/10 to-transparent" />
 
       {/* Ambient gradient wash — opacity only transitions on hover
           (no continuous animation loop), so it costs nothing at rest
@@ -112,14 +112,14 @@ const SpecialtyCard = memo(function SpecialtyCard({
         }`}
       >
         <div className="flex items-start justify-between">
-          <span className="flex h-12 w-12 transform-gpu items-center justify-center rounded-2xl border border-white/15 bg-white/10 backdrop-blur-md transition-transform duration-500 will-change-transform group-hover:-translate-y-1 group-hover:rotate-3">
-            <Icon className="h-5 w-5 text-white/90" strokeWidth={1.75} />
+          <span className="flex h-12 w-12 transform-gpu items-center justify-center rounded-2xl border border-npgh-white/15 bg-npgh-white/10 backdrop-blur-md transition-transform duration-500 will-change-transform group-hover:-translate-y-1 group-hover:rotate-3">
+            <Icon className="h-5 w-5 text-npgh-white/90" strokeWidth={1.75} />
           </span>
           <ArrowUpRight
             className={`h-5 w-5 transition-all duration-300 ${
               isOpen
-                ? "-translate-y-1 translate-x-1 rotate-45 text-white/70"
-                : "text-white/30 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:rotate-45 group-hover:text-white/70"
+                ? "-translate-y-1 translate-x-1 rotate-45 text-npgh-gold"
+                : "text-npgh-white/30 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:rotate-45 group-hover:text-npgh-gold"
             }`}
           />
         </div>
@@ -145,7 +145,7 @@ const SpecialtyCard = memo(function SpecialtyCard({
             fit even fully expanded, it scrolls inside the glass panel with
             a subtle scrollbar instead of being clipped or pushed off-card. */}
         <div
-          className={`min-h-0 transform-gpu overflow-y-auto rounded-2xl border border-white/15 bg-obsidian/40 pt-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-xl transition-all duration-300 ease-out will-change-transform ${
+          className={`min-h-0 transform-gpu overflow-y-auto rounded-2xl border border-npgh-white/15 bg-npgh-charcoal/40 pt-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-xl transition-all duration-300 ease-out will-change-transform ${
             isCompact ? "px-3" : "px-4 sm:px-5"
           } ${
             isOpen
@@ -158,14 +158,14 @@ const SpecialtyCard = memo(function SpecialtyCard({
           }`}
         >
           <h3
-            className={`line-clamp-2 font-medium text-white ${
+            className={`line-clamp-2 font-medium text-npgh-white ${
               isCompact ? "text-base leading-snug" : "text-lg sm:text-xl"
             }`}
           >
             {item.title}
           </h3>
           <p
-            className={`mt-2 leading-relaxed text-white/70 transition-all duration-300 ${
+            className={`mt-2 leading-relaxed text-npgh-white/70 transition-all duration-300 ${
               isCompact ? "text-xs" : "text-sm"
             } ${isOpen ? "line-clamp-none" : "line-clamp-2 group-hover:line-clamp-none"}`}
           >
@@ -181,7 +181,7 @@ export default function BentoGrid() {
   return (
     <section
       id="specialties"
-      className="relative bg-obsidian pb-28 pt-16 sm:pb-36 sm:pt-24"
+      className="relative bg-npgh-charcoal pb-28 pt-16 sm:pb-36 sm:pt-24"
     >
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
@@ -191,13 +191,14 @@ export default function BentoGrid() {
           transition={{ duration: 0.7 }}
           className="mx-auto max-w-2xl text-center"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/50">
+          <span className="inline-flex items-center gap-2 rounded-full border border-npgh-white/10 bg-npgh-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-npgh-white/50">
             Our Specialties
           </span>
-          <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-            Engineered for <span className="text-gradient-accent">Homes That Lead</span>
+          <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight text-npgh-white sm:text-5xl">
+            Engineered for{" "}
+            <span className="gold-metallic bg-clip-text text-transparent">Homes That Lead</span>
           </h2>
-          <p className="mt-4 text-white/50">
+          <p className="mt-4 text-npgh-white/50">
             Four disciplines, purpose-built for Ludhiana&apos;s finest independent houses.
           </p>
         </motion.div>
@@ -208,7 +209,7 @@ export default function BentoGrid() {
           ))}
         </div>
 
-        <p className="mt-6 text-center text-[11px] text-white/25">
+        <p className="mt-6 text-center text-[11px] text-npgh-white/25">
           Reference imagery for illustrative purposes, sourced under the Unsplash License.
         </p>
       </div>

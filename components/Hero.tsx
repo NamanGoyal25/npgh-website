@@ -38,7 +38,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden bg-obsidian"
+      className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden bg-npgh-charcoal"
     >
       {/* ================================================================
           BACKGROUND VIDEO — replace with your own footage
@@ -49,7 +49,7 @@ export default function Hero() {
              it displays instantly while the video buffers, so the hero
              never shows a blank frame on slow connections
           If no video is supplied, this layer simply renders transparent
-          and the ambient glow orbs + obsidian background carry the hero.
+          and the ambient glow orbs + npgh-charcoal background carry the hero.
           ================================================================ */}
       <div className="absolute inset-0 z-0">
         <video
@@ -63,8 +63,8 @@ export default function Hero() {
           <source src="/hero-glass.mp4" type="video/mp4" />
           {/* your local video file replaces "hero-glass.mp4" above */}
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-obsidian/70 via-obsidian/60 to-obsidian" />
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-npgh-charcoal/70 via-npgh-charcoal/60 to-npgh-charcoal" />
+        <div className="absolute inset-0 bg-gradient-to-t from-npgh-charcoal via-transparent to-transparent" />
       </div>
 
       {/* Ambient glow orbs — animate opacity + transform only (both
@@ -96,9 +96,9 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="glass-panel mb-8 inline-flex transform-gpu items-center gap-2 rounded-full px-4 py-1.5 text-xs tracking-wide text-white/70 will-change-transform"
+          className="glass-panel mb-8 inline-flex transform-gpu items-center gap-2 rounded-full px-4 py-1.5 text-xs tracking-wide text-npgh-white/70 will-change-transform"
         >
-          <Sparkles className="h-3.5 w-3.5 text-iridescent-amber" />
+          <Sparkles className="h-3.5 w-3.5 text-npgh-gold" />
           Est. Precision Since Three Decades &middot; Ludhiana, Punjab
         </motion.div>
 
@@ -106,7 +106,7 @@ export default function Hero() {
           variants={container}
           initial="hidden"
           animate="show"
-          className="font-display text-4xl font-semibold leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-7xl"
+          className="font-display text-4xl font-semibold leading-[1.08] tracking-tight text-npgh-white sm:text-6xl lg:text-7xl"
         >
           {headlineWords.map((w, i) => (
             <span key={i} className="mr-3 inline-block overflow-hidden align-bottom last:mr-0">
@@ -114,7 +114,7 @@ export default function Hero() {
                 variants={word}
                 className={`inline-block transform-gpu will-change-transform ${
                   w === "Precision." || w === "Glass."
-                    ? "text-gradient-crystal animate-gradient-x bg-[length:220%_auto] will-change-[background-position]"
+                    ? "gold-metallic bg-clip-text text-transparent"
                     : "text-gradient"
                 }`}
               >
@@ -128,7 +128,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1.1 }}
-          className="mt-7 max-w-2xl text-balance text-base leading-relaxed text-white/60 sm:text-lg"
+          className="mt-7 max-w-2xl text-balance text-base leading-relaxed text-npgh-white/60 sm:text-lg"
         >
           Ludhiana's trusted name for wholesale aluminium section supply and
           bespoke decorative glass engineering — stained, sand-blasted,
@@ -143,7 +143,7 @@ export default function Hero() {
         >
           <a
             href="#specialties"
-            className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-7 py-4 text-sm font-medium text-white backdrop-blur-md transition-all duration-300 hover:border-white/25 hover:bg-white/10 sm:w-auto"
+            className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-npgh-white/15 bg-npgh-white/5 px-7 py-4 text-sm font-medium text-npgh-white backdrop-blur-md transition-all duration-300 hover:border-npgh-white/25 hover:bg-npgh-white/10 sm:w-auto"
           >
             Explore Specialties
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -155,7 +155,7 @@ export default function Hero() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex w-full transform-gpu items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-iridescent-cyan via-white to-iridescent-amber bg-[length:200%_auto] px-7 py-4 text-sm font-semibold text-obsidian shadow-amber-glow transition-all duration-500 will-change-transform hover:bg-[position:100%_0] hover:scale-[1.02] sm:w-auto"
+            className="group relative inline-flex w-full transform-gpu items-center justify-center gap-2 overflow-hidden rounded-2xl gold-metallic px-7 py-4 text-sm font-semibold text-npgh-charcoal shadow-amber-glow transition-all duration-500 will-change-transform hover:scale-[1.02] sm:w-auto"
           >
             <MessageCircle className="h-4 w-4" />
             Instant WhatsApp Quote
@@ -167,7 +167,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1.5 }}
-          className="mt-16 grid w-full max-w-2xl grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-8"
+          className="mt-16 grid w-full max-w-2xl grid-cols-3 divide-x divide-npgh-white/10 border-t border-npgh-white/10 pt-8"
         >
           {[
             { value: "30+", label: "Years of Craft" },
@@ -175,10 +175,10 @@ export default function Hero() {
             { value: "100%", label: "Precision Finish" },
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col items-center px-2">
-              <span className="text-2xl font-semibold text-white sm:text-3xl">
+              <span className="text-2xl font-semibold text-npgh-white sm:text-3xl">
                 {stat.value}
               </span>
-              <span className="mt-1 text-[11px] uppercase tracking-wide text-white/40">
+              <span className="mt-1 text-[11px] uppercase tracking-wide text-npgh-white/40">
                 {stat.label}
               </span>
             </div>

@@ -17,6 +17,12 @@ const config: Config = {
           amber: "#F5C77E",
           violet: "#B39CFF",
         },
+        npgh: {
+          charcoal: "#091019",
+          gold: "#CBAE89",
+          blue: "#243A54",
+          white: "#F2EFEA",
+        },
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
