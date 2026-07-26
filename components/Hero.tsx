@@ -114,7 +114,7 @@ export default function Hero() {
                 variants={word}
                 className={`inline-block transform-gpu will-change-transform ${
                   w === "Precision." || w === "Glass."
-                    ? "gold-metallic bg-clip-text text-transparent"
+                    ? "gold-metallic-text"
                     : "text-gradient"
                 }`}
               >

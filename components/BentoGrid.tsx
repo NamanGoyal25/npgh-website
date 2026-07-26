@@ -196,7 +196,7 @@ export default function BentoGrid() {
           </span>
           <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight text-npgh-white sm:text-5xl">
             Engineered for{" "}
-            <span className="gold-metallic bg-clip-text text-transparent">Homes That Lead</span>
+            <span className="gold-metallic-text">Homes That Lead</span>
           </h2>
           <p className="mt-4 text-npgh-white/50">
             Four disciplines, purpose-built for Ludhiana&apos;s finest independent houses.

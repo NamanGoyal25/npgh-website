@@ -16,6 +16,17 @@
   background: linear-gradient(135deg, #8f704e 0%, #cbae89 45%, #f0d6a7 70%, #a7835d 100%);
 }
 
+/* Self-contained gold gradient text — bundles the metallic gradient with
+   background-clip + transparent color in one atomic rule, so pairing it
+   with the plain `.gold-metallic` background utility (used standalone on
+   buttons) never fights over background-clip in the cascade. */
+.gold-metallic-text {
+  background: linear-gradient(135deg, #8f704e 0%, #cbae89 45%, #f0d6a7 70%, #a7835d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 html {
   scroll-behavior: smooth;
 }
