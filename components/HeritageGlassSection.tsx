@@ -138,26 +138,26 @@ export default function HeritageGlassSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="order-1 md:order-2"
+            className="order-1 overflow-visible md:order-2"
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/20 bg-amber-200/[0.06] px-4 py-1.5 text-[11px] uppercase tracking-[0.15em] text-amber-100/70">
               <Landmark className="h-3.5 w-3.5 text-amber-300" />
               Heritage Craftsmanship
             </span>
 
-            <h2 className="mt-6 font-display text-3xl font-semibold leading-snug tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
-              {/* Each line is its own block-level span carrying its own gradient
-                  background (required for the bg-clip-text trick). With the
-                  old leading-[1.15], the two boxes stacked with zero gap, so
-                  the second span's opaque gradient background began right at
-                  the first line's baseline — painting over the descender of
-                  the "g" in "Preserving" before it could render. leading-snug
-                  plus explicit pb-1 on the non-last lines gives the descender
-                  room to clear before the next line's background starts. */}
-              <span className="block pb-1 bg-gradient-to-r from-amber-100 via-amber-200 to-amber-300 bg-clip-text text-transparent">
+            {/* No h-/max-h- has ever been set here — this heading has always
+                been free to size to its content. The clipping instead came
+                from the two lines below being separate block spans that each
+                carry their own gradient background (needed for bg-clip-text).
+                overflow-visible + pb-4 here, plus min-h-[1.2em] and pb-1.5 on
+                each line, guarantee the box is never shorter than the font's
+                full em box and that each line's background can never start
+                before the previous line's descenders have fully cleared. */}
+            <h2 className="mt-6 overflow-visible pb-4 font-display text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
+              <span className="block min-h-[1.2em] overflow-visible pb-1.5 bg-gradient-to-r from-amber-100 via-amber-200 to-amber-300 bg-clip-text text-transparent">
                 Preserving Heritage.
               </span>
-              <span className="block bg-gradient-to-r from-amber-200 via-amber-300 to-amber-100 bg-clip-text text-transparent">
+              <span className="block min-h-[1.2em] overflow-visible bg-gradient-to-r from-amber-200 via-amber-300 to-amber-100 bg-clip-text text-transparent">
                 Crafting Devotion.
               </span>
             </h2>
