@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Frame, Palette, Wind, Gem, ArrowUpRight, type LucideIcon } from "lucide-react";
@@ -61,6 +61,13 @@ const SpecialtyCard = memo(function SpecialtyCard({
   // titles wrap across 1-2 lines instead of 4-5.
   const isCompact = layout.includes("md:col-span-1");
 
+  // Drives the "reveal full description" interaction. group-hover: classes
+  // below already handle desktop mouse hover with pure CSS (no re-render),
+  // but touch devices have no reliable hover state — so tapping the card
+  // toggles this instead, and the same expanded classes are applied either
+  // way. Tapping again (or moving the mouse away on desktop) collapses it.
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <motion.div
       custom={index}
@@ -69,7 +76,12 @@ const SpecialtyCard = memo(function SpecialtyCard({
       whileInView="show"
       viewport={{ once: true, margin: "-80px" }}
       whileHover={{ scale: 1.015 }}
-      className={`iridescent-border group relative transform-gpu overflow-hidden rounded-3xl border border-white/8 transition-shadow duration-500 will-change-transform ${layout} ${item.glow}`}
+      onClick={() => setIsOpen((prev) => !prev)}
+      onMouseLeave={() => setIsOpen(false)}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isOpen}
+      className={`iridescent-border group relative transform-gpu cursor-pointer overflow-hidden rounded-3xl border border-white/8 transition-shadow duration-500 will-change-transform ${layout} ${item.glow}`}
     >
       {/* Residential application photo */}
       <Image
@@ -103,20 +115,38 @@ const SpecialtyCard = memo(function SpecialtyCard({
           <span className="flex h-12 w-12 transform-gpu items-center justify-center rounded-2xl border border-white/15 bg-white/10 backdrop-blur-md transition-transform duration-500 will-change-transform group-hover:-translate-y-1 group-hover:rotate-3">
             <Icon className="h-5 w-5 text-white/90" strokeWidth={1.75} />
           </span>
-          <ArrowUpRight className="h-5 w-5 text-white/30 transition-all duration-500 group-hover:text-white/70 group-hover:translate-x-1 group-hover:-translate-y-1" />
+          <ArrowUpRight
+            className={`h-5 w-5 transition-all duration-300 ${
+              isOpen
+                ? "-translate-y-1 translate-x-1 rotate-45 text-white/70"
+                : "text-white/30 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:rotate-45 group-hover:text-white/70"
+            }`}
+          />
         </div>
 
         {/* True glassmorphism text panel — frosted, bordered, and
             independent of the image wash, so the photo behind it stays
-            vibrant while the copy stays legible. Height is dynamic
-            (h-auto) with generous bottom padding so the last line of
-            copy never gets clipped by the card's overflow-hidden edge.
-            transform-gpu + will-change-transform force this panel onto
-            its own GPU compositor layer so the backdrop-blur doesn't get
-            recomputed against the rest of the page on every scroll tick. */}
+            vibrant while the copy stays legible. Collapsed, it shows the
+            title plus a short two-line preview; on hover (desktop) or tap
+            (mobile, via the isOpen state above) it smoothly grows taller
+            and un-clamps the paragraph to reveal the full description —
+            no modal, just the card breathing open in place. overflow-hidden
+            + max-height (rather than animating height directly) is what
+            makes that a smooth, GPU-cheap transition instead of a jump-cut.
+            transform-gpu + will-change-transform keep the backdrop-blur on
+            its own compositor layer so it doesn't get recomputed against
+            the rest of the page on every scroll tick. */}
         <div
-          className={`h-auto transform-gpu rounded-2xl border border-white/15 bg-obsidian/40 pt-4 pb-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-xl will-change-transform ${
+          className={`transform-gpu overflow-hidden rounded-2xl border border-white/15 bg-obsidian/40 pt-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-xl transition-all duration-300 ease-out will-change-transform ${
             isCompact ? "px-3" : "px-4 sm:px-5"
+          } ${
+            isOpen
+              ? isCompact
+                ? "max-h-40 pb-5"
+                : "max-h-60 pb-6"
+              : isCompact
+              ? "max-h-16 pb-4 group-hover:max-h-40 group-hover:pb-5"
+              : "max-h-20 pb-4 group-hover:max-h-60 group-hover:pb-6"
           }`}
         >
           <h3
@@ -127,11 +157,9 @@ const SpecialtyCard = memo(function SpecialtyCard({
             {item.title}
           </h3>
           <p
-            className={`mt-2 leading-relaxed text-white/70 ${
-              isCompact
-                ? "text-xs line-clamp-3"
-                : "text-sm line-clamp-3 md:line-clamp-none"
-            }`}
+            className={`mt-2 leading-relaxed text-white/70 transition-all duration-300 ${
+              isCompact ? "text-xs" : "text-sm"
+            } ${isOpen ? "line-clamp-none" : "line-clamp-2 group-hover:line-clamp-none"}`}
           >
             {item.description}
           </p>

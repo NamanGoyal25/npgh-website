@@ -185,17 +185,6 @@ export default function Hero() {
           ))}
         </motion.div>
       </div>
-
-      {/* Scroll cue */}
-      <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 transform-gpu text-white/30 will-change-transform"
-      >
-        <div className="h-9 w-5 rounded-full border border-white/20 p-1">
-          <div className="h-1.5 w-1.5 rounded-full bg-white/50" />
-        </div>
-      </motion.div>
     </section>
   );
 }
