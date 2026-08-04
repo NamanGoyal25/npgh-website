@@ -1,0 +1,30 @@
+name: Instagram Auto-Post
+
+on:
+  schedule:
+    # 9:00 AM UTC daily
+    - cron: "0 9 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # scripts/publish-instagram.js has zero npm dependencies (it uses
+      # Node's built-in fetch), so no install step is required to run it.
+
+      - name: Run Instagram publish script
+        run: node scripts/publish-instagram.js
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          VERCEL_URL: ${{ secrets.VERCEL_URL }}
