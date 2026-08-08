@@ -28,6 +28,9 @@ jobs:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           VERCEL_URL: ${{ secrets.VERCEL_URL }}
+          # Required — our production Cloudinary cloud name, used to proxy
+          # the Vercel OG PNG into the JPEG format Meta's Graph API requires.
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           # Optional — enables the CallMeBot WhatsApp failure alert. If
           # either is unset, the script logs a warning and skips the alert
           # rather than failing.

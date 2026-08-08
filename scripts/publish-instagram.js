@@ -12,9 +12,19 @@
  * WhatsApp alert, so this script never needs `npm install` to run in CI.
  *
  * Requires env vars:
- *   GEMINI_API_KEY, IG_USER_ID, IG_ACCESS_TOKEN, VERCEL_URL
+ *   GEMINI_API_KEY, IG_USER_ID, IG_ACCESS_TOKEN, VERCEL_URL,
+ *   CLOUDINARY_CLOUD_NAME
  * Optional (enables real-time failure alerts via CallMeBot):
  *   WHATSAPP_PHONE, WHATSAPP_API_KEY
+ *
+ * Meta's Graph API only accepts JPEG for Instagram media containers — our
+ * own /api/og endpoint (Vercel OG / next/og) only outputs PNG. Rather than
+ * pulling in a PNG->JPEG encoder (sharp/canvas aren't Edge-compatible
+ * anyway), we proxy the PNG through our own production Cloudinary account's
+ * fetch/transform URL, which converts it to JPEG on the fly. This keeps the
+ * script at zero npm dependencies. (We deliberately do NOT use Cloudinary's
+ * shared "demo" cloud for this — it's a public testing sandbox with no SLA
+ * and isn't meant for a live client's recurring automated traffic.)
  */
 
 const GEMINI_MODEL = "gemini-2.5-flash";
@@ -29,6 +39,33 @@ function requireEnv(name) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return value;
+}
+
+/**
+ * CLOUDINARY_CLOUD_NAME gets its own check (rather than routing through
+ * requireEnv) so the failure message is explicit about *why* it's needed —
+ * this isn't a generic credential, it's what makes the PNG->JPEG conversion
+ * possible at all, and a bare "missing env var" error would be confusing
+ * out of context.
+ */
+function requireCloudinaryCloudName() {
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  if (!cloudName) {
+    throw new Error(
+      "Missing CLOUDINARY_CLOUD_NAME — a Cloudinary cloud name is required to convert the Vercel OG PNG into the JPEG format Meta's Graph API requires."
+    );
+  }
+  return cloudName;
+}
+
+/**
+ * Wraps the Vercel OG PNG URL in our production Cloudinary account's
+ * fetch/transform delivery URL, forcing it to be served as a JPEG.
+ * Meta then fetches this JPEG URL directly — no image bytes ever pass
+ * through this script.
+ */
+function toJpegProxyUrl(cloudName, originalUrl) {
+  return `https://res.cloudinary.com/${cloudName}/image/fetch/f_jpg/${encodeURIComponent(originalUrl)}`;
 }
 
 function sleep(ms) {
@@ -217,20 +254,24 @@ async function main() {
   const igUserId = requireEnv("IG_USER_ID");
   const igAccessToken = requireEnv("IG_ACCESS_TOKEN");
   const vercelUrl = requireEnv("VERCEL_URL");
+  const cloudinaryCloudName = requireCloudinaryCloudName();
 
   console.log("Requesting today's headline + caption from Gemini...");
   const { headline, caption } = await generateContent(geminiApiKey);
   console.log(`Headline: ${headline}`);
 
   const origin = normalizeOrigin(vercelUrl);
-  const imageUrl = `${origin}/api/og?title=${encodeURIComponent(headline)}`;
-  console.log(`Poster URL: ${imageUrl}`);
+  const pngImageUrl = `${origin}/api/og?title=${encodeURIComponent(headline)}`;
+  console.log(`Poster URL (PNG): ${pngImageUrl}`);
+
+  const jpegImageUrl = toJpegProxyUrl(cloudinaryCloudName, pngImageUrl);
+  console.log(`Poster URL (JPEG via Cloudinary): ${jpegImageUrl}`);
 
   console.log("Creating Instagram media container...");
   const containerId = await createMediaContainer({
     igUserId,
     accessToken: igAccessToken,
-    imageUrl,
+    imageUrl: jpegImageUrl,
     caption,
   });
   console.log(`Container created: ${containerId}`);
