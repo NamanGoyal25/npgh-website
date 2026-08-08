@@ -8,9 +8,13 @@
  *      Meta finishes processing it, then publish it.
  *
  * Deliberately zero npm dependencies — uses Node's built-in `fetch` (Node 18+)
- * for both the Gemini REST call and the Meta Graph API calls, so this script
- * never needs `npm install` to run in CI. Requires env vars:
+ * for the Gemini REST call, the Meta Graph API calls, and the CallMeBot
+ * WhatsApp alert, so this script never needs `npm install` to run in CI.
+ *
+ * Requires env vars:
  *   GEMINI_API_KEY, IG_USER_ID, IG_ACCESS_TOKEN, VERCEL_URL
+ * Optional (enables real-time failure alerts via CallMeBot):
+ *   WHATSAPP_PHONE, WHATSAPP_API_KEY
  */
 
 const GEMINI_MODEL = "gemini-2.5-flash";
@@ -176,6 +180,38 @@ async function publishContainer({ igUserId, accessToken, containerId }) {
   return data.id;
 }
 
+/**
+ * Sends a real-time failure alert to the Project Architect's personal
+ * WhatsApp via the CallMeBot API. Never throws — a broken/missing
+ * notification must not mask or replace the original pipeline error.
+ */
+async function sendWhatsAppAlert(message) {
+  const phone = process.env.WHATSAPP_PHONE;
+  const apiKey = process.env.WHATSAPP_API_KEY;
+
+  if (!phone || !apiKey) {
+    console.warn(
+      "WHATSAPP_PHONE / WHATSAPP_API_KEY not set — skipping WhatsApp failure alert."
+    );
+    return;
+  }
+
+  const encodedMessage = encodeURIComponent(message);
+  const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&apikey=${apiKey}&text=${encodedMessage}`;
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      const body = await res.text();
+      console.error(`CallMeBot alert request failed (${res.status}): ${body}`);
+      return;
+    }
+    console.log("WhatsApp failure alert sent via CallMeBot.");
+  } catch (alertErr) {
+    console.error("Failed to send CallMeBot WhatsApp alert:", alertErr.message || alertErr);
+  }
+}
+
 async function main() {
   const geminiApiKey = requireEnv("GEMINI_API_KEY");
   const igUserId = requireEnv("IG_USER_ID");
@@ -212,7 +248,19 @@ async function main() {
   console.log(`Published successfully. Media ID: ${mediaId}`);
 }
 
-main().catch((err) => {
-  console.error("publish-instagram.js failed:", err.message || err);
-  process.exit(1);
-});
+async function run() {
+  try {
+    await main();
+  } catch (error) {
+    console.error("publish-instagram.js failed:", error.message || error);
+
+    // Wait for the CallMeBot alert to finish sending before the process
+    // exits — a bare `main().catch()` would let Node tear down mid-flight
+    // and the WhatsApp ping might never actually leave the runner.
+    await sendWhatsAppAlert(`🚨 NPGH Instagram Automation Failed: ${error.message || error}`);
+
+    process.exit(1);
+  }
+}
+
+run();
